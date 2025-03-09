@@ -15,25 +15,41 @@ output.onmouseleave = () => {
   output.style.backgroundColor = "transparent";
 };
 
-// password generator
-const charset = [
-  "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789|!£$%&/()=?^ìé*ç°§[]@#{}",
-];
+// copied password
+output.addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(output.textContent);
+    alertCopied();
+  } catch (err) {
+    alert("impossibile copiare negli appunti");
+    console.error(err);
+  }
+});
 
+function alertCopied() {
+  const copiedDiv = document.createElement("div");
+  copiedDiv.innerText = "Copiata";
+  copiedDiv.style =
+    "background-color: lightgrey; padding: 10px; border-radius: 10px; font-size:20px; font-weight: bold; width: fit-content; margin-bottom: 5px";
+  output.after(copiedDiv);
+  setTimeout(() => {
+    copiedDiv.remove();
+  }, 1000);
+}
+
+// password generator
+const charset =
+  "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789|!£$%&/()=?^ìé*ç°§[]@#{}";
 btn.addEventListener("click", () => {
   let length = 10;
-  if (Number(input.value) && Number(input.value > 10)) {
+  if (Number(input.value) && Number(input.value > 10 && input.value < 51)) {
     length = input.value;
   }
   input.value = "";
   let password = "";
-  console.log(charset[0][84]);
   for (i = 0; i < length; i++) {
-    let char = 85;
-    while (char < 0 || char > 84) {
-      char = Math.round(Math.random() * 100);
-    }
-    password += charset[0][char];
+    let randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
   }
   output.textContent = password;
 });
