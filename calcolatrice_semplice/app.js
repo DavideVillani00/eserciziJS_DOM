@@ -9,7 +9,7 @@ btnContainer.className = "btnContainer";
 container.append(output, btnContainer);
 let num1 = "";
 let num2 = "";
-let operando = false;
+let operando = "";
 
 const btnArray = [7, 8, 9, "/", 4, 5, 6, "*", 1, 2, 3, "-", 0, "C", "=", "+"];
 btnArray.forEach((el) => {
@@ -23,52 +23,48 @@ btnArray.forEach((el) => {
 });
 
 function operazioni(tasto) {
-  console.log(tasto);
-  if (Number(tasto)) {
+  if (Number(tasto) || tasto == 0) {
     if (!operando) {
       num1 += tasto;
       num1 = Number(num1);
       output.textContent = num1;
-      console.log(operando);
     } else {
       num2 += tasto;
       num2 = Number(num2);
       output.textContent = num2;
-      console.log(operando);
     }
   } else {
-    operando = true;
+    if (tasto === "C") {
+      num1 = "";
+      num2 = "";
+      operando = "";
+      output.textContent = 0;
+    }
     if (num2) {
-      switch (tasto) {
-        case "/":
-          num1 = num1 / num2;
-          num2 = "";
-          output.textContent = num1;
-          break;
-        case "*":
-          num1 = num1 * num2;
-          num2 = "";
-          output.textContent = num1;
-          break;
-        case "-":
-          num1 = num1 - num2;
-          num2 = "";
-          output.textContent = num1;
-          break;
-        case "+":
-          num1 = num1 + num2;
-          num2 = "";
-          output.textContent = num1;
-          break;
-        case "C":
-          num1 = "";
-          num2 = "";
-          output.textContent = 0;
-          break;
-
-        default:
-          break;
+      if (operando === "/") {
+        num1 = num1 / num2;
+        num2 = "";
+        operando = "";
+        output.textContent = num1;
+      } else if (operando === "*") {
+        num1 = num1 * num2;
+        num2 = "";
+        operando = "";
+        output.textContent = num1;
+      } else if (operando === "-") {
+        num1 = num1 - num2;
+        num2 = "";
+        operando = "";
+        output.textContent = num1;
+      } else if (operando === "+") {
+        num1 = num1 + num2;
+        num2 = "";
+        operando = "";
+        output.textContent = num1;
       }
+    }
+    if (num1) {
+      operando = tasto;
     }
   }
 }
