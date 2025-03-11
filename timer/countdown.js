@@ -10,27 +10,36 @@ buttonReset.textContent = "reset";
 
 document.body.append(output, input, buttonStart, buttonReset);
 let minutesCount = 0;
-let secondsCount = 60;
+let secondsCount = 0;
+let houresCount = 0;
 let millisecondsCount = 100;
 let countdown;
+
 function handleCountdown() {
   countdown = setInterval(() => {
     millisecondsCount--;
+    if (minutesCount === 0) {
+      minutesCount = 59;
+      houresCount--;
+    }
+    if (secondsCount === 0) {
+      secondsCount = 59;
+      minutesCount--;
+    }
     if (millisecondsCount === 0) {
       millisecondsCount = 100;
       secondsCount--;
     }
-    if (secondsCount === 0) {
-      secondsCount = 60;
-      minutesCount--;
-    }
-    output.textContent = `${minutesCount}:${secondsCount}:${millisecondsCount}`;
+    output.textContent = `${houresCount}:${minutesCount}:${secondsCount}:${millisecondsCount}`;
   }, 10);
 }
 buttonStart.addEventListener("click", () => {
   if (!countdown) {
     minutesCount = Number(input.value);
-    console.log(minutesCount % 60);
+
+    houresCount = parseInt(minutesCount / 60);
+    minutesCount = minutesCount % 60;
+    console.log(houresCount, ":", minutesCount);
     handleCountdown();
   }
 });
@@ -38,7 +47,7 @@ buttonStart.addEventListener("click", () => {
 buttonReset.addEventListener("click", () => {
   if (countdown) {
     minutesCount = 0;
-    secondsCount = 60;
+    secondsCount = 0;
     millisecondsCount = 100;
     clearInterval(countdown);
     countdown = null;
